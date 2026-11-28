@@ -5,11 +5,15 @@
 {% endblock %}
 
 {% block content %}
+  {% for message in get_flashed_messages() %}
+    <div class = "flash error"> {{ message }}</div>
+  {% endfor %}
+
   <form method="post">
     <label for="title">Title</label>
-    <input name="title" id="title" value="{{ request.form['title'] }}" required>
+    <input name="title" id="title" value="{{ request.form['title'] or post['title'] if post else '' }}" required>
     <label for="body">Body</label>
-    <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+    <textarea name="body" id="body">{{ request.form['body'] or post['title'] if post else '' }}</textarea>
     <input type="submit" value="Save">
   </form>
 {% endblock %}

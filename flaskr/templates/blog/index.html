@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+  <p> Posts: {{ posts|length }} </p>
   {% for post in posts %}
     <article class="post">
       <header>

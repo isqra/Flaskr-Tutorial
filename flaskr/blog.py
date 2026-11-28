@@ -1,3 +1,5 @@
+import sqlite3
+
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -30,16 +32,21 @@ def create():
             error = 'Title is required.'
 
         if error is not None:
-            flash(error)
+            flash(error, 'error')
         else:
             db = get_db()
+        try:
             db.execute(
                 'INSERT INTO post (title, body, author_id)'
                 ' VALUES (?, ?, ?)',
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+        except sqlite3.Error as e:
+            flash(f"Error DataBase: {e}", 'error')
+            return redirect(url_for('blog.create'))
+
+        return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
 
